@@ -5,7 +5,8 @@ import discord, os, json, platform
 config = {
 	'discord_token': "Put Discord API Token here.",
     'id_to_watch': "Put the ID you want DownBot to watch here",
-    'notify_id': []
+    'notify_id': [],
+    'time_to_wait': 120
 }
 config_file = 'config.json'
 
