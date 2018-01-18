@@ -1,6 +1,7 @@
 #Downbot
 
 import discord, os, json, platform, asyncio
+from discord.ext.commands import Bot
 
 config = {
 	'discord_token': "Put Discord API Token here.",
@@ -17,19 +18,19 @@ if os.path.isfile(config_file):
 with open('config.json', 'w') as f:
 	json.dump(config, f, indent='\t')
 
-if platform.platform() == "Windows":
+if platform.system() == "Windows":
     startscript = "startscript.bat"
 else:
-    print(platform.platform())
+    print(platform.system())
     startscript = "startscript.sh"
 
-bot = discord.Client()
+bot = discord.ext.commands.Bot(command_prefix='#!')
 loop = asyncio.AbstractEventLoop()
 
 async def startUp():
     os.system(startscript)
 
-@bot.event()
+@bot.event
 async def on_member_update(self, member):
     configmemberid = member.guild.get_member(config[id_to_watch])
     if member.id == configmemberid.id:
