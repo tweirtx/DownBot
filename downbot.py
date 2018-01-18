@@ -31,9 +31,8 @@ async def startUp():
     os.system(startscript)
 
 @bot.event
-async def on_member_update(self, member):
-    configmemberid = member.guild.get_member(config[id_to_watch])
-    if member.id == configmemberid.id:
+async def on_member_update(self, before, after):
+    if before.id == config['id_to_watch']:
         task = await loop.call_later(config['time_to_wait'], startUp)
         loop.create_task(shutdown(task))
         print("Debug: alarm raised")
