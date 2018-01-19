@@ -5,7 +5,7 @@ from discord.ext.commands import Bot
 
 config = {
 	'discord_token': "Put Discord API Token here.",
-    'id_to_watch': "Put the ID you want DownBot to watch here",
+    'id_to_watch': 0,
     'notify_id': [],
     'time_to_wait': 120
 }
@@ -22,7 +22,7 @@ if platform.system() == "Windows":
     startscript = "startscript.bat"
 else:
     print(platform.system())
-    startscript = "startscript.sh"
+    startscript = "./startscript.sh"
 
 bot = discord.ext.commands.Bot(command_prefix='#!')
 loop = asyncio.AbstractEventLoop()
@@ -31,10 +31,10 @@ async def startUp():
     os.system(startscript)
 
 @bot.event
-async def on_member_update(self, before, after):
+async def on_member_update(before, after):
     if before.id == config['id_to_watch']:
-        task = await loop.call_later(config['time_to_wait'], startUp)
-        loop.create_task(shutdown(task))
+        task = loop.call_later(config['time_to_wait'], startUp)
+        await loop.create_task(shutdown(task))
         print("Debug: alarm raised")
     else:
         print("Debug: event detected but no alarm raised")
@@ -44,5 +44,8 @@ async def shutdown(task):
     print("Debugging: task shut down")
     await task.cancel()
 
+@bot.event
+async def on_ready():
+    print("Ready")
 
 bot.run(config['discord_token'])
