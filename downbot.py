@@ -27,8 +27,15 @@ else:
 bot = discord.ext.commands.Bot(command_prefix='#!')
 loop = asyncio.AbstractEventLoop()
 
+class startBot():
+    cancelled = False
+
 async def startUp():
-    os.system(startscript)
+    await asyncio.sleep(config['time_to_wait'])
+    if not startBot.cancelled:
+        os.system(startscript)
+    if startBot.cancelled:
+        startBot.cancelled = False
 
 @bot.event
 async def on_member_update(before, after):
@@ -36,8 +43,13 @@ async def on_member_update(before, after):
         for i in config['notify_id']:
             person = before.guild.get_member(i)
             await person.send("NOTICE: {} has gone offline. Starting backup process in {} seconds. "
-            "Resolve outage or send #!shutdown to cancel.".format(before.display_name, config['time_to_wait']))
+            "Resolve outage or send #!cancel to cancel.".format(before.display_name, config['time_to_wait']))
+        await startUp()
 
+@bot.command()
+async def cancel(ctx):
+    startBot.cancelled = True
+    await ctx.send("Startup cancelled")
 
 @bot.event
 async def on_ready():
