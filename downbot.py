@@ -31,6 +31,15 @@ async def startUp():
     os.system(startscript)
 
 @bot.event
+async def on_member_update(before, after):
+    if before.id == config['id_to_watch']:
+        for i in config['notify_id']:
+            person = before.guild.get_member(i)
+            await person.send("NOTICE: {} has gone offline. Starting backup process in {} seconds. "
+            "Resolve outage or send #!shutdown to cancel.".format(before.display_name, config['time_to_wait']))
+
+
+@bot.event
 async def on_ready():
     print("Ready")
 
