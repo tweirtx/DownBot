@@ -29,6 +29,7 @@ loop = asyncio.AbstractEventLoop()
 
 class startBot():
     cancelled = False
+    in_alarm = False
 
 async def startUp():
     await asyncio.sleep(config['time_to_wait'])
@@ -40,11 +41,20 @@ async def startUp():
 @bot.event
 async def on_member_update(before, after):
     if before.id == config['id_to_watch']:
-        for i in config['notify_id']:
-            person = before.guild.get_member(i)
-            await person.send("NOTICE: {} has gone offline. Starting backup process in {} seconds. "
-            "Resolve outage or send #!cancel to cancel.".format(before.display_name, config['time_to_wait']))
-        await startUp()
+        if after.status == discord.Status('offline'):
+            for i in config['notify_id']:
+                person = before.guild.get_member(i)
+                await person.send("NOTICE: {} has gone offline. Starting backup process in {} seconds. "
+                "Resolve outage or send #!cancel to cancel.".format(before.display_name, config['time_to_wait']))
+            startBot.cancelled = False
+            startBot.in_alarm = True
+            await startUp()
+        elif after.status == discord.Status('online') and startBot.in_alarm:
+            startBot.cancelled = True
+            startBot.in_alarm = False
+        else:
+            print("after.status is {} type {} and in_alarm is {}".format(after.status, type(after.status), startBot.in_alarm))
+    
 
 @bot.command()
 async def cancel(ctx):
