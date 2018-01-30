@@ -30,13 +30,13 @@ loop = asyncio.AbstractEventLoop()
 
 class startBot():
     cancelled = False
-    in_alarm = False
+    handle = None
 
 
 async def startUp():
     await asyncio.sleep(config['time_to_wait'])
     if not startBot.cancelled:
-        os.system(startscript)
+        await os.system(startscript)
     if startBot.cancelled:
         startBot.cancelled = False
 
@@ -50,19 +50,28 @@ async def on_member_update(before, after):
                 await person.send("NOTICE: {} has gone offline. Starting backup process in {} seconds. "
                                   "Resolve outage or send #!cancel to cancel.".format(before.display_name, config['time_to_wait']))
             startBot.cancelled = False
-            startBot.in_alarm = True
-            await startUp()
-        elif after.status == discord.Status('online') and startBot.in_alarm:
+            startBot.handle = startUp()
+            await startBot.handle
+        elif after.status == discord.Status('online') and before.status == discord.Status('offline'):
             startBot.cancelled = True
-            startBot.in_alarm = False
+        elif before.status == discord.Status.dnd and after.status == discord.Status.online:
+            print("Primary back online registered")
+            await startBot.handle.cancel()
         else:
-            print("after.status is {} type {} and in_alarm is {}".format(after.status, type(after.status), startBot.in_alarm))
+            print("after.status is {} type {} and before.status is {}".format(after.status, type(after.status), before.status))
 
 
 @bot.command()
 async def cancel(ctx):
     startBot.cancelled = True
     await ctx.send("Startup cancelled")
+
+
+@bot.command()
+async def shutdown:
+    startBot.cancelled = False
+    await startBot.handle.cancel()
+    await ctx.send("Shutdown successful")
 
 
 @bot.event
