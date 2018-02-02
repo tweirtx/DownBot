@@ -68,7 +68,7 @@ async def cancel(ctx):
 
 
 @bot.command()
-async def shutdown:
+async def shutdown():
     startBot.cancelled = False
     await startBot.handle.cancel()
     await ctx.send("Shutdown successful")
