@@ -1,6 +1,6 @@
 #Downbot
 
-import discord, os, json, platform, asyncio
+import discord, os, json, platform, asyncio, subprocess, wget
 from discord.ext.commands import Bot
 
 config = {
@@ -20,9 +20,17 @@ with open('config.json', 'w') as f:
 
 if platform.system() == "Windows":
     startscript = "startscript.bat"
+    try:
+        open('startscript.bat', 'r')
+    except:
+        wget.download('https://github.com')
 else:
     print(platform.system())
     startscript = "./startscript.sh"
+    try:
+        open('startscript.sh', 'r')
+    except:
+        wget.download('https://github.com')
 
 bot = discord.ext.commands.Bot(command_prefix='#!')
 loop = asyncio.AbstractEventLoop()
@@ -36,7 +44,7 @@ class startBot():
 async def startUp():
     await asyncio.sleep(config['time_to_wait'])
     if not startBot.cancelled:
-        await os.system(startscript)
+        subprocess.call(startscript)
     if startBot.cancelled:
         startBot.cancelled = False
 
@@ -68,10 +76,15 @@ async def cancel(ctx):
 
 
 @bot.command()
-async def shutdown():
+async def shutdown(ctx):
     startBot.cancelled = False
     await startBot.handle.cancel()
     await ctx.send("Shutdown successful")
+
+
+@bot.command()
+async def ping(ctx):
+    await ctx.send("Pong!")
 
 
 @bot.event
