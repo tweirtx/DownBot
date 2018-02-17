@@ -23,14 +23,14 @@ if platform.system() == "Windows":
     try:
         open('startscript.bat', 'r')
     except:
-        wget.download('https://github.com')
+        wget.download('https://raw.githubusercontent.com/tweirtx/DownBot/scripts/startscript.bat')
 else:
     print(platform.system())
     startscript = "./startscript.sh"
     try:
         open('startscript.sh', 'r')
     except:
-        wget.download('https://github.com')
+        wget.download('https://raw.githubusercontent.com/tweirtx/DownBot/scripts/startscript.sh')
 
 bot = discord.ext.commands.Bot(command_prefix='#!')
 loop = asyncio.AbstractEventLoop()
