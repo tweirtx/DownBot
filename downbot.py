@@ -1,6 +1,6 @@
 #Downbot
 
-import discord, os, json, platform, asyncio, subprocess, wget, psutil
+import discord, os, json, platform, asyncio, subprocess, wget, signal, psutil
 from discord.ext.commands import Bot
 
 config = {
@@ -47,7 +47,7 @@ class startBot():
 async def startUp():
     await asyncio.sleep(config['time_to_wait'])
     if not startBot.cancelled:
-        startBot.handle = subprocess.Popen(startCommand, shell=True)
+        startBot.handle = subprocess.Popen(startCommand, shell=True).pid
     if startBot.cancelled:
         startBot.cancelled = False
 
@@ -85,8 +85,14 @@ async def cancel(ctx):
 async def shutdown(ctx):
     startBot.in_alarm = False
     startBot.cancelled = False
-    startBot.handle.kill()
+    os.kill(startBot.handle, signal.SIGTERM)
+    psutil.Process(startBot.handle).terminate()
     await ctx.send("Shutdown successful")
+
+
+@bot.command()
+async def handle(ctx):
+    await ctx.send(startBot.handle)
 
 
 @bot.event
