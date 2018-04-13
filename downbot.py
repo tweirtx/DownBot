@@ -19,7 +19,7 @@ with open('config.json', 'w') as f:
     json.dump(config, f, indent='\t')
 
 if platform.system() == "Windows":
-    startscript = "startscript.bat"
+    startCommand = "startscript.bat"
     windows = True
     try:
         open('startscript.bat', 'r')
@@ -47,7 +47,7 @@ class startBot():
 async def startUp():
     await asyncio.sleep(config['time_to_wait'])
     if not startBot.cancelled:
-        startBot.handle = subprocess.Popen(startCommand, shell=True).pid
+        startBot.handle = subprocess.Popen(startCommand, shell=False).pid
     if startBot.cancelled:
         startBot.cancelled = False
 
