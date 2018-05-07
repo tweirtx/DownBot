@@ -1,102 +1,118 @@
-#Downbot
+"""Provides a Discord bot redundancy system"""
 
-import discord, os, json, platform, asyncio, subprocess, wget, signal, psutil
+import os
+import json
+import platform
+import asyncio
+import subprocess
+import signal
+import wget
+import psutil
+import discord
 from discord.ext.commands import Bot
 
-config = {
+CONFIG = {
     'discord_token': "Put Discord API Token here.",
     'id_to_watch': 0,
     'notify_id': [],
     'time_to_wait': 120
 }
-config_file = 'config.json'
+CONFIG_FILE = 'CONFIG.json'
 
-if os.path.isfile(config_file):
-    with open(config_file) as f:
-        config.update(json.load(f))
+if os.path.isfile(CONFIG_FILE):
+    with open(CONFIG_FILE) as f:
+        CONFIG.update(json.load(f))
 
-with open('config.json', 'w') as f:
-    json.dump(config, f, indent='\t')
+with open('CONFIG.json', 'w') as f:
+    json.dump(CONFIG, f, indent='\t')
 
 if platform.system() == "Windows":
-    startCommand = "startscript.bat"
-    windows = True
+    START_COMMAND = "startscript.bat"
+    # windows = True
     try:
         open('startscript.bat', 'r')
-    except:
+    except FileNotFoundError:
         wget.download('https://raw.githubusercontent.com/tweirtx/DownBot/scripts/startscript.bat')
 else:
     print(platform.system())
-    windows = False
-    startCommand = './startscript.sh'
+    # windows = False
+    START_COMMAND = './startscript.sh'
     try:
         open('./startscript.sh', 'r')
-    except:
+    except FileNotFoundError:
         wget.download('https://raw.githubusercontent.com/tweirtx/DownBot/scripts/startscript.sh')
 
-bot = discord.ext.commands.Bot(command_prefix='#!')
-loop = asyncio.AbstractEventLoop()
+BOT = Bot(command_prefix='#!')
 
 
-class startBot():
+class StartBot():
+    """Keeps track of certain variablesS"""
     cancelled = False
     handle = None
     in_alarm = False
 
 
-async def startUp():
-    await asyncio.sleep(config['time_to_wait'])
-    if not startBot.cancelled:
-        startBot.handle = subprocess.Popen(startCommand, shell=False).pid
-    if startBot.cancelled:
-        startBot.cancelled = False
+async def start_up():
+    """Starts the backup process"""
+    await asyncio.sleep(CONFIG['time_to_wait'])
+    if not StartBot.cancelled:
+        StartBot.handle = subprocess.Popen(START_COMMAND, shell=False).pid
+    if StartBot.cancelled:
+        StartBot.cancelled = False
 
 
-@bot.event
+@BOT.event
 async def on_member_update(before, after):
-    if before.id == config['id_to_watch']:
+    """If the bot goes offline, trigger everything that should happen"""
+    if before.id == CONFIG['id_to_watch']:
         if after.status == discord.Status('offline'):
-            for i in config['notify_id']:
+            for i in CONFIG['notify_id']:
                 person = before.guild.get_member(i)
                 await person.send("NOTICE: {} has gone offline. Starting backup process in {} seconds. "
-                                  "Resolve outage or send #!cancel to cancel.".format(before.display_name, config['time_to_wait']))
-            startBot.cancelled = False
-            await startUp()
+                                  "Resolve outage or send #!cancel to cancel.".format(before.display_name,
+                                                                                      CONFIG['time_to_wait']))
+            StartBot.cancelled = False
+            await start_up()
         elif after.status == discord.Status('online') and before.status == discord.Status('offline'):
-            startBot.cancelled = True
+            StartBot.cancelled = True
         elif before.status == discord.Status.dnd and after.status == discord.Status.online:
             print("Primary back online registered")
-            startBot.cancelled = True
+            StartBot.cancelled = True
         else:
-            print("after.status is {} type {} and before.status is {}".format(after.status, type(after.status), before.status))
+            print("after.status is {} type {} and before.status is {}".format(after.status, type(after.status),
+                                                                              before.status))
 
 
-@bot.command()
+@BOT.command()
 async def cancel(ctx):
-    if startBot.in_alarm:
-        startBot.cancelled = True
-        startBot.in_alarm = False
-        await ctx.send("Startup cancelled")
+    """Manually cancel a startup"""
+    if StartBot.in_alarm:
+        StartBot.cancelled = True
+        StartBot.in_alarm = False
+        await ctx.send("start up cancelled")
     else:
-        await ctx.send("No startup to cancel!")
+        await ctx.send("No start up to cancel!")
 
 
-@bot.command()
+@BOT.command()
 async def shutdown(ctx):
-    startBot.in_alarm = False
-    startBot.cancelled = False
-    os.kill(startBot.handle, signal.SIGTERM)
-    psutil.Process(startBot.handle).terminate()
+    """Manually shut down the process"""
+    StartBot.in_alarm = False
+    StartBot.cancelled = False
+    os.kill(StartBot.handle, signal.SIGTERM)
+    psutil.Process(StartBot.handle).terminate()
     await ctx.send("Shutdown successful")
 
 
-@bot.command()
+@BOT.command()
 async def handle(ctx):
-    await ctx.send(startBot.handle)
+    """Sends the handle of the process (debug only)"""
+    await ctx.send(StartBot.handle)
 
 
-@bot.event
+@BOT.event
 async def on_ready():
+    """Announce that the bot is ready once it is"""
     print("Ready")
 
-bot.run(config['discord_token'])
+BOT.run(CONFIG['discord_token'])
