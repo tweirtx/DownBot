@@ -18,21 +18,13 @@ if os.path.isfile(config_file):
 with open('config.json', 'w') as f:
     json.dump(config, f, indent='\t')
 
-if platform.system() == "Windows":
-    startscript = "startscript.bat"
-    windows = True
-    try:
-        open('startscript.bat', 'r')
-    except:
-        wget.download('https://raw.githubusercontent.com/tweirtx/DownBot/scripts/startscript.bat')
-else:
-    print(platform.system())
-    windows = False
-    startCommand = './startscript.sh'
-    try:
-        open('./startscript.sh', 'r')
-    except:
-        wget.download('https://raw.githubusercontent.com/tweirtx/DownBot/scripts/startscript.sh')
+print(platform.system())
+startCommand = './startscript.sh'
+try:
+    open('./startscript.sh', 'r')
+except FileNotFoundErrors:
+    wget.download('https://raw.githubusercontent.com/tweirtx/DownBot/scripts/startscript.sh')
+
 
 bot = discord.ext.commands.Bot(command_prefix='#!')
 loop = asyncio.AbstractEventLoop()
@@ -47,7 +39,7 @@ class startBot():
 async def startUp():
     await asyncio.sleep(config['time_to_wait'])
     if not startBot.cancelled:
-        startBot.handle = subprocess.Popen(startCommand, shell=True).pid
+        startBot.handle = subprocess.Popen(startCommand, shell=False)
     if startBot.cancelled:
         startBot.cancelled = False
 
@@ -85,14 +77,13 @@ async def cancel(ctx):
 async def shutdown(ctx):
     startBot.in_alarm = False
     startBot.cancelled = False
-    os.kill(startBot.handle, signal.SIGTERM)
-    psutil.Process(startBot.handle).terminate()
+    startBot.handle.terminate()
     await ctx.send("Shutdown successful")
 
 
 @bot.command()
-async def handle(ctx):
-    await ctx.send(startBot.handle)
+async def gethandle(ctx):
+    await ctx.send(startBot.handle.pid)
 
 
 @bot.event
