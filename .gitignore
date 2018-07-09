@@ -2,3 +2,4 @@
 startscript.bat
 startscript.sh
 .idea/
+node_modules/
