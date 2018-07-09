@@ -5,9 +5,7 @@ import json
 import platform
 import asyncio
 import subprocess
-import signal
 import wget
-import psutil
 import discord
 from discord.ext.commands import Bot
 
@@ -15,7 +13,9 @@ CONFIG = {
     'discord_token': "Put Discord API Token here.",
     'id_to_watch': 0,
     'notify_id': [],
-    'time_to_wait': 120
+    'time_to_wait': 120,
+    'directory': 'Put the COMPLETE path of the folder the bot is in here',
+    'start_command': 'Put the command to start the bot here'
 }
 CONFIG_FILE = 'CONFIG.json'
 
@@ -27,7 +27,7 @@ with open('CONFIG.json', 'w') as f:
     json.dump(CONFIG, f, indent='\t')
 
 print(platform.system())
-START_COMMAND = './startscript.sh'
+START_COMMAND = CONFIG['start_command']
 try:
     open('./startscript.sh', 'r')
 except FileNotFoundError:
@@ -50,7 +50,7 @@ async def start_up():
     """Starts the backup process"""
     await asyncio.sleep(CONFIG['time_to_wait'])
     if not StartBot.cancelled:
-        StartBot.handle = subprocess.Popen(START_COMMAND, shell=False).pid
+        StartBot.handle = subprocess.Popen(START_COMMAND, shell=True, cwd=CONFIG['directory'])
     if StartBot.cancelled:
         StartBot.cancelled = False
 
@@ -93,8 +93,7 @@ async def shutdown(ctx):
     """Manually shut down the process"""
     StartBot.in_alarm = False
     StartBot.cancelled = False
-    os.kill(StartBot.handle, signal.SIGTERM)
-    psutil.Process(StartBot.handle).terminate()
+    StartBot.handle.kill()
     await ctx.send("Shutdown successful")
 
 
