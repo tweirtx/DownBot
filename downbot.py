@@ -27,10 +27,10 @@ with open('CONFIG.json', 'w') as f:
     json.dump(CONFIG, f, indent='\t')
 
 print(platform.system())
-startCommand = './startscript.sh'
+START_COMMAND = './startscript.sh'
 try:
     open('./startscript.sh', 'r')
-except FileNotFoundErrors:
+except FileNotFoundError:
     wget.download('https://raw.githubusercontent.com/tweirtx/DownBot/scripts/startscript.sh')
 
 
@@ -40,7 +40,7 @@ BOT = Bot(command_prefix='#!')
 
 
 class StartBot():
-    """Keeps track of certain variablesS"""
+    """Keeps track of certain variables"""
     cancelled = False
     handle = None
     in_alarm = False
