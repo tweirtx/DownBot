@@ -1,0 +1,8 @@
+{
+    'discord_token': "Put Discord API Token here.",
+    'id_to_watch': 0,
+    'notify_id': [],
+    'time_to_wait': 120,
+    'directory': 'Put the COMPLETE path of the folder the bot is in here',
+    'start_command': 'Put the command to start the bot here'
+}
