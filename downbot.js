@@ -8,11 +8,19 @@ var running;
 
 function start() {
     if (in_alarm) {
-        var process = pm2.start({
+        pm2.start({
             script: config.start_command,
             pm_cwd: config.directory
         })
     }
+}
+
+async function alertAlertedPeople(whoToSend, whatToSend) {
+    if (!whoToSend.dmChannel) {
+        await whoToSend.createDM;
+        console.log("DM created");
+    }
+    await whoToSend.dmChannel.send(whatToSend).catch(console.error)
 }
 
 
@@ -36,20 +44,22 @@ client.on('message', msg => {
             running = false;
         }
         else {
-            msg.reply("cannot shut down something that is not running!!")
+            msg.reply("cannot shut down something that is not running!!");
         }
     }
 });
 
-client.on('presenceUpdate', () => {
+client.on('presenceUpdate', (oldMember, newMember) => {
     if (oldMember.id == config.id_to_watch) {
-        if(oldMember.stuff) {
-            console.log("Alarm detected");
-            for (memb in config.notify_id) {
-                var memberToSend = client.fetchUser(memb);
-                memberToSend.send("The bot this bot is responsible for monitoring has gone down. Starting automatically if #!cancel is not sent.")
+        if(oldMember.presence.status == "online") {
+            if (newMember.presence.status == "offline") {
+                console.log("Alarm detected");
+                for (memb in config.notify_id) {
+                    var memberToSend = client.fetchUser(memb);
+                    var prometo = alertAlertedPeople(memberToSend, "The bot this bot is responsible for monitoring has gone down. Starting automatically if #!cancel is not sent.")
+                }
+                setTimeout(start, config.time_to_wait);
             }
-            setTimeout(start, config.time_to_wait);
         }
     }
 });
