@@ -16,6 +16,9 @@ function start() {
 }
 
 async function alertAlertedPeople(whoToSend, whatToSend) {
+    console.log(whoToSend);
+    var memberToSend = await client.fetchUser(whoToSend);
+    console.log(memberToSend);
     if (!whoToSend.dmChannel) {
         await whoToSend.createDM;
         console.log("DM created");
@@ -47,6 +50,9 @@ client.on('message', msg => {
             msg.reply("cannot shut down something that is not running!!");
         }
     }
+    if(msg.content == "#!ping") {
+        msg.reply("Pong!");
+    }
 });
 
 client.on('presenceUpdate', (oldMember, newMember) => {
@@ -54,13 +60,17 @@ client.on('presenceUpdate', (oldMember, newMember) => {
         if(oldMember.presence.status == "online") {
             if (newMember.presence.status == "offline") {
                 console.log("Alarm detected");
+                var memb;
                 for (memb in config.notify_id) {
-                    var memberToSend = client.fetchUser(memb);
-                    var prometo = alertAlertedPeople(memberToSend, "The bot this bot is responsible for monitoring has gone down. Starting automatically if #!cancel is not sent.")
+                    var membid = config.notify_id[memb];
+                    var prometo = alertAlertedPeople(membid, "The bot this bot is responsible for monitoring has gone down. Starting automatically if #!cancel is not sent.")
                 }
-                setTimeout(start, config.time_to_wait);
+                setTimeout(start, config.time_to_wait * 1000);
             }
         }
+    }
+    else {
+        console.log("Not it");
     }
 });
 
