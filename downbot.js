@@ -9,9 +9,11 @@ var running;
 function start() {
     if (in_alarm) {
         pm2.start({
+            name: "downbot-backup-process",
             script: config.start_command,
-            pm_cwd: config.directory
-        })
+            cwd: config.directory
+        });
+        running = true;
     }
 }
 
@@ -19,11 +21,7 @@ async function alertAlertedPeople(whoToSend, whatToSend) {
     console.log(whoToSend);
     var memberToSend = await client.fetchUser(whoToSend);
     console.log(memberToSend);
-    if (!whoToSend.dmChannel) {
-        await whoToSend.createDM;
-        console.log("DM created");
-    }
-    await whoToSend.dmChannel.send(whatToSend).catch(console.error)
+    await memberToSend.send(whatToSend).catch(console.error)
 }
 
 
@@ -34,8 +32,10 @@ client.on('ready', () => {
 client.on('message', msg => {
     if(msg.content == "#!cancel") {
         if (in_alarm) {
-            msg.reply("cancelled");
-            in_alarm = false;
+            if (!running) {
+                msg.reply("cancelled");
+                in_alarm = false;
+            }
         }
         else {
             msg.reply("no startup to cancel!")
@@ -59,6 +59,7 @@ client.on('presenceUpdate', (oldMember, newMember) => {
     if (oldMember.id == config.id_to_watch) {
         if(oldMember.presence.status == "online") {
             if (newMember.presence.status == "offline") {
+                in_alarm = true;
                 console.log("Alarm detected");
                 var memb;
                 for (memb in config.notify_id) {
