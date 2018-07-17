@@ -1,0 +1,7 @@
+{
+  "name": "downbot-backup-process",
+  "script": "dozer",
+  "cwd": "/home/travis/PycharmProjects/Dozer",
+  "interpreter": "/usr/bin/python3",
+  "interpreter_args": "-m dozer"
+}

@@ -1,5 +1,3 @@
-*.json
-startscript.bat
-startscript.sh
 .idea/
 node_modules/
+CONFIG.json

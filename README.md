@@ -16,31 +16,18 @@ This is the best way I can figure out, let me know if you have a better one!
 
 2. Add code to your bot to set the presence to dnd (do not disturb) if it is the backup host. This will not only signal to developers that something is wrong, but it is a status change that is overriden automatically when the primary instance comes back online. That change signals DownBot to terminate its backup process.
 
-# DownBot setup (Linux)
+# DownBot setup
 
-This is a step-by-step guide to setting up DownBot on a Linux backup host. This guide may also work for macOS, but macOS is not officially tested or supported.
+This is a step-by-step guide to setting up DownBot on a backup host. This process works on Linux, but hasn't been tested on Windows or macOS at this time.
 
-1. **Download the files** Do this by navigating to your chosen directory and running ``git clone https://github.com/tweirtx/DownBot``
-2. **Install Python 3.6** If your bot is a Python bot, chances are you're already good to go. If your bot is not Python, you might need to install 3.6. Run ``python3 -V`` within the DownBot folder. If your installed version is higher than 3.6.0, you are all set. Otherwise, refer to the **Installing Python3.6** section down below. Once you've gotten it installed, make sure discord.py is installed by running the following command: ``pip3 install -e git+https://github.com/Rapptz/discord.py.git@rewrite#egg=discord.py``
-3. **Run the bot process** You will need to run the bot process to generate the config file to modify in the next step. Use ``python3 downbot.py as the command to do so.``
-4. **Set your config variables**. Open config.json in your favorite editor (I prefer nano, but use whatever you prefer!) and set the keys accordingly. For the discord_token variable, create a bot user and paste the user token into the discord_token JSON key. This ***must*** be separate from the bot you are setting up redundancy on. For id_to_watch, paste in the user ID of the bot you want to monitor. notify_id should be a list of the user IDs you want DownBot to DM on a bot outage event. time_to_wait is a configurable integer that specifies the time (in seconds) DownBot should give you to resolve the outage or cancel the auto-start. The default is 2 minutes, but feel free to change this.
-5. **Set your start commands** Almost done! All that's left to do is tell DownBot how it should start your bot when it's necessary. Open start.sh with your favorite text editor. Inside you should see a template that you just have to fill in with your appropriate commands. Change bot_directory to the directory your backup bot process is in. Change the second line to whatever the correct start command for your bot is, Python or otherwise.
-6. **Make the start script usable** In order to make your start script usable, you will need to mark it as executable. Simply run ``sudo chmod +x startscript.sh``to make it usable.
-7. **All done!** You should be ready to go from here. Go ahead and run ``python3 downbot.py`` and see if it works. If you see "Ready" then that means everything is installed correctly. Test your config by setting your bot to offline while DownBot is running.
+**1. Download the files.** To get started, run ```git clone https://github.com/tweirtx/DownBot``` to download the files. Alternatively, download a ZIP file from this page.
 
-# DownBot setup (Windows)
+**2. Install node.js.** Refer to https://nodejs.org for instructions to install node.js for your OS.
 
-This is a step-by-step guide to setting up DownBot on a Windows host.
+**3. Install dependencies.** Run ```npm install discord.js``` followed by ```npm install --save pm2``` in the directory where the DownBot files are.
 
-1. Install the Windows Subsystem for Linux: https://docs.microsoft.com/en-us/windows/wsl/install-win10
-2. Follow the Linux steps under the WSL
+**4. Configure the bot.** Open the sample_config.json file in your favorite text editor (mine's nano) and fill out each space. Once you're done filling it out, rename the file to CONFIG.json.
 
-# Installing Python3.6
+**5. Run the bot.** Congratulations, it should be done! Go ahead and run ```node downbot.js``` in the DownBot folder. If you see the word ready appear, then you have successfully started the bot!"
 
-1. Install any system packages required by running the correct command for your OS version from the list here: https://github.com/pyenv/pyenv/wiki
-2. Run the following command: curl -L https://gist.githubusercontent.com/tweirtx/e891ad89d600559d1b014fa8b625fc97/raw/02c97575e616a58b29094c3cc3fd6f4d469a8943/py3.6-linux | bash
-3. Restart your interpreter by logging out and back in or rebooting. If you are in a graphical environment, closing and reopening Terminal will work as well.
-4. cd to your DownBot directory and run the following commands:
-pyenv install 3.6.4
-pyenv local 3.6.4
-5. Run python3 -V and you should see Python 3.6.4 as the installed Python version in that folder.
+**Troubleshooting** If the bot is misbehaving, contact tweirtx#9400 for assistance.
