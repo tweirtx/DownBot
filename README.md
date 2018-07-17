@@ -24,7 +24,7 @@ This is a step-by-step guide to setting up DownBot on a backup host. This proces
 
 **2. Install node.js.** Refer to https://nodejs.org for instructions to install node.js for your OS.
 
-**3. Install dependencies.** Run ```npm install discord.js``` followed by ```npm install --save pm2``` in the directory where the DownBot files are.
+**3. Install dependencies.** Run ```npm install``` in the directory where the DownBot files are.
 
 **4. Configure the bot.** Open the sample_config.json file in your favorite text editor (mine's nano) and fill out each space. Once you're done filling it out, rename the file to CONFIG.json.
 
