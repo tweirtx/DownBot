@@ -34,4 +34,5 @@ This is a step-by-step guide to setting up DownBot on a backup host. This proces
 
 # Windows/macOS setup
 **1. Install Linux** There is a dependency that only works on Linux, so this is the only way. Recommended options for installing Linux include wiping Windows and installing Linux, dual-booting, installing the Windows Subsystem for Linux (Windows 10 only), or setting up a Linux virtual machine in VirtualBox or your VM software of choice.
+
 **2. Follow the Linux setup steps within Linux**
