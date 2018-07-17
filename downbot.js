@@ -18,9 +18,7 @@ function start() {
 }
 
 async function alertAlertedPeople(whoToSend, whatToSend) {
-    console.log(whoToSend);
     var memberToSend = await client.fetchUser(whoToSend);
-    console.log(memberToSend);
     await memberToSend.send(whatToSend).catch(console.error)
 }
 
@@ -79,9 +77,6 @@ client.on('presenceUpdate', (oldMember, newMember) => {
                 in_alarm = false;
             }
         }
-    }
-    else {
-        console.log("Not it");
     }
 });
 
