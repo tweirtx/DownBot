@@ -43,8 +43,10 @@ client.on('message', msg => {
     }
     if(msg.content == "#!shutdown") {
         if (running) {
-            msg.reply("sucessfully shut down");
+            pm2.stop("downbot-backup-process");
+            in_alarm = false;
             running = false;
+            msg.reply("sucessfully shut down");
         }
         else {
             msg.reply("cannot shut down something that is not running!!");
@@ -67,6 +69,14 @@ client.on('presenceUpdate', (oldMember, newMember) => {
                     var prometo = alertAlertedPeople(membid, "The bot this bot is responsible for monitoring has gone down. Starting automatically if #!cancel is not sent.")
                 }
                 setTimeout(start, config.time_to_wait * 1000);
+            }
+        }
+        if (oldMember.presence.status == "dnd") {
+            if (newMember.presence.status == "online") {
+                console.log('stop detected');
+                pm2.stop("downbot-backup-process");
+                running = false;
+                in_alarm = false;
             }
         }
     }
