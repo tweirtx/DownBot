@@ -16,9 +16,9 @@ This is the best way I can figure out, let me know if you have a better one!
 
 2. Add code to your bot to set the presence to dnd (do not disturb) if it is the backup host. This will not only signal to developers that something is wrong, but it is a status change that is overriden automatically when the primary instance comes back online. That change signals DownBot to terminate its backup process.
 
-# DownBot setup
+# DownBot Linux setup
 
-This is a step-by-step guide to setting up DownBot on a backup host. This process works on Linux, but at this time macOS is unsupported. Windows has not been tested
+This is a step-by-step guide to setting up DownBot on a backup host. This process works on Linux, but at this time macOS and Windows are not natively supported. See below if you are using macOS or Windows
 
 **1. Download the files.** To get started, run ```git clone https://github.com/tweirtx/DownBot``` to download the files. Alternatively, download a ZIP file from this page.
 
@@ -31,3 +31,7 @@ This is a step-by-step guide to setting up DownBot on a backup host. This proces
 **5. Run the bot.** Congratulations, it should be done! Go ahead and run ```node downbot.js``` in the DownBot folder. If you see the word ready appear, then you have successfully started the bot!"
 
 **Troubleshooting** If the bot is misbehaving, contact tweirtx#9400 for assistance.
+
+# Windows/macOS setup
+**1. Install Linux** There is a dependency that only works on Linux, so this is the only way. Recommended options for installing Linux include wiping Windows and installing Linux, dual-booting, installing the Windows Subsystem for Linux (Windows 10 only), or setting up a Linux virtual machine in VirtualBox or your VM software of choice.
+**2. Follow the Linux setup steps within Linux**
