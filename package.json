@@ -8,8 +8,6 @@
     "discord.js": "^11.3.2",
     "erlpack": "github:discordapp/erlpack",
     "libsodium-wrappers": "^0.7.3",
-    "node-opus": "^0.2.9",
-    "opusscript": "0.0.6",
     "pm2": "^3.0.0",
     "sodium": "^2.0.3",
     "uws": "^9.148.0"
