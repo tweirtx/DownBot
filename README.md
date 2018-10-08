@@ -18,7 +18,7 @@ This is the best way I can figure out, let me know if you have a better one!
 
 # DownBot setup
 
-This is a step-by-step guide to setting up DownBot on a backup host. This process works on Linux and macOS, but at this time Windows is  not natively supported. See below if you are using Windows
+This is a step-by-step guide to setting up DownBot on a backup host. This process works on Linux and macOS, but at this time Windows is  not natively supported. If you're using Windows, don't.
 
 **1. Download the files.** To get started, run ```git clone https://github.com/tweirtx/DownBot``` to download the files. Alternatively, download a ZIP file from this page.
 
