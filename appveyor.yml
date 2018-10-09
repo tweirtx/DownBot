@@ -10,7 +10,7 @@ install:
   - npm config set msvs_version 2015
   - npm install discord.js opusscript
   - echo opusscript is done installing
-  - npm install --no-optional
+  - npm install
 
 # Post-install test scripts.
 test_script:
