@@ -8,7 +8,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   # install modules
   - npm config set msvs_version 2015
-  - npm install --g opusscript
+  - npm install discord.js opusscript
   - echo opusscript is done installing
   - npm install --no-optional
 
