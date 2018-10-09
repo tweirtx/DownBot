@@ -18,13 +18,13 @@ This is the best way I can figure out, let me know if you have a better one!
 
 # DownBot setup
 
-This is a step-by-step guide to setting up DownBot on a backup host. This process works on Linux and macOS, but at this time Windows is  not natively supported. If you're using Windows, don't.
+This is a step-by-step guide to setting up DownBot on a backup host. This process works on Linux, macOS, and Windows, however Windows requires an extra step (noted in the guide).
 
 **1. Download the files.** To get started, run ```git clone https://github.com/tweirtx/DownBot``` to download the files. Alternatively, download a ZIP file from this page.
 
 **2. Install node.js.** Refer to https://nodejs.org for instructions to install node.js for your OS.
 
-**3. Install dependencies.** Run ```npm install``` in the directory where the DownBot files are.
+**3. Install dependencies.** First, if you are on Windows, you must run ```npm install discord.js``` before continuing. Otherwise it will try to build a library that doesn't work on Windows. Once you've done that on Windows (you don't have to on Linux or macOS) run ```npm install``` in the directory where the DownBot files are to finish installing dependencies.
 
 **4. Configure the bot.** Open the sample_config.json file in your favorite text editor (mine's nano) and fill out each space. Once you're done filling it out, rename the file to CONFIG.json.
 
