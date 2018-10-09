@@ -8,8 +8,8 @@ install:
   - ps: Install-Product node $env:nodejs_version
   # install modules
   - npm config set msvs_version 2015
-  - npm install --global --production windows-build-tools node-opus
-  - echo node-opus is done installing
+  - npm install --global --production windows-build-tools opusscript
+  - echo opusscript is done installing
   - npm install
 
 # Post-install test scripts.
