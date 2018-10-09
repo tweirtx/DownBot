@@ -6,4 +6,4 @@ os:
 matrix:
   allow_failures:
     - os: osx
-install: npm install
+install: npm install --no-optional
