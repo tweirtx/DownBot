@@ -10,7 +10,7 @@ install:
   - npm config set msvs_version 2015
   - npm install --g opusscript
   - echo opusscript is done installing
-  - npm install
+  - npm install --no-optional
 
 # Post-install test scripts.
 test_script:
