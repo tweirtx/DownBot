@@ -7,9 +7,7 @@
     "bufferutil": "^3.0.5",
     "discord.js": "^11.3.2",
     "erlpack": "github:discordapp/erlpack",
-    "libsodium-wrappers": "^0.7.3",
     "pm2": "^3.0.0",
-    "sodium": "^2.0.3",
     "uws": "^9.148.0"
   },
   "devDependencies": {},
