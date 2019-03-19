@@ -30,12 +30,12 @@ This is a step-by-step guide to setting up DownBot on a backup host. This proces
 
 **5. Run the bot.** Congratulations, it should be done! Go ahead and run ```node downbot.js``` in the DownBot folder. If you see the word ready appear, then you have successfully started the bot!
 
-**Troubleshooting** If the bot is misbehaving, contact tweirtx#9400 for assistance.
+**Troubleshooting** If the bot is misbehaving, contact tweirtx#5052 for assistance.
 
 Credits:
 
 tweirtx - Writing the bot, testing on Linux
 
-endreman0 - Windows testing
+octocynth - Windows testing
 
 elevenchars - macOS testing
