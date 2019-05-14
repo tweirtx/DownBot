@@ -4,11 +4,10 @@
   "description": "This is a Discord bot that will monitor your bot to check if it goes offline. If the bot does go offline, any people you have in the list will be notified via a direct message, and if the bot does not come back online within a configurable time allotment or you do not manually cancel, this bot will run a system command to start your bot process.",
   "main": "downbot.js",
   "dependencies": {
-    "bufferutil": "^3.0.5",
-    "discord.js": "^11.3.2",
+    "bufferutil": "^4.0.1",
+    "discord.js": "^11.5.",
     "erlpack": "github:discordapp/erlpack",
-    "pm2": "^3.0.0",
-    "uws": "^9.148.0"
+    "pm2": "^3.5.0"
   },
   "devDependencies": {},
   "scripts": {
