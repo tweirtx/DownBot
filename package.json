@@ -5,7 +5,7 @@
   "main": "downbot.js",
   "dependencies": {
     "bufferutil": "^4.0.1",
-    "discord.js": "^11.5.",
+    "discord.js": "^11.5.0",
     "erlpack": "github:discordapp/erlpack",
     "pm2": "^3.5.0"
   },
